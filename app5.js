@@ -1,5 +1,6 @@
-const express = require("express");
+const express = require('express');
 const app = express();
+app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.use("/public", express.static(__dirname + "/public"));
@@ -23,13 +24,14 @@ app.get("/keiyo2", (req, res) => {
   res.render('db2', { data: station });
 });
 
-app.get("/keiyo_add", (req, res) => {
-  let id = req.query.id;
-  let code = req.query.code;
-  let name = req.query.name;
+app.post("/keiyo_add", (req, res) => {
+  const body = req.body || {};
+  let id = Number(req.body.id);
+  let code = req.body.code;
+  let name = req.body.name;
   let newdata = { id: id, code: code, name: name };
   station.push( newdata );
-  res.render('db2', { data: station });
+  res.redirect('/keiyo2')
 });
 
 app.get("/hello1", (req, res) => {
